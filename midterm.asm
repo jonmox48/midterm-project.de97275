@@ -1,0 +1,348 @@
+#include<p18f4550.inc>
+
+lp_cnt1 	set 0x00
+lp_cnt2 	set 0x01
+
+			org 0x00
+			goto start
+			org 0x08
+			retfie
+			org 0x18
+			retfie
+			
+dup_nop		macro MUSS
+			variable i
+i = 0
+			while i < MUSS
+			nop
+i += 1
+			endw
+			endm
+			
+;*******************************************
+;DELAY 10 MILLISECOND
+;*******************************************
+DIOMS 		MOVLW D'80'
+			MOVWF lp_cnt2,A
+NEW1 		MOVLW D'250'
+			MOVWF lp_cnt1,A
+NEW2 		dup_nop D'247'
+			DECFSZ lp_cnt1,F,A
+			BRA NEW2
+			DECFSZ lp_cnt2,F,A
+			BRA NEW1
+			
+			NOP
+			RETURN
+			
+;********************************************			
+;INPUT N OUTPUT
+;********************************************
+COMMAND1		BCF  PORTC,	4,A
+				BCF	 PORTC, 5,A
+				BSF  PORTC, 6,A	
+				CALL DIOMS
+				BCF  PORTC, 6,A
+				RETURN
+
+DATA1		    BSF  PORTC, 4,A
+				BCF	 PORTC, 5,A
+				BSF  PORTC, 6,A	
+				CALL DIOMS
+				BCF	 PORTC, 6,A
+				RETURN
+;******************************************
+;DISPLAY NAME MUSTAQIM
+;******************************************
+
+MUS1  		MOVLW D'77'			;DISPLAY M
+			MOVWF PORTD, A
+			CALL  DATA1
+
+			MOVLW D'85'			;DISPLAY U
+			MOVWF PORTD, A
+			CALL  DATA1
+
+			MOVLW D'83'			;DISPLAY S
+			MOVWF PORTD, A
+			CALL  DATA1
+
+			MOVLW D'84'			;DISPLAY T
+			MOVWF PORTD, A
+			CALL  DATA1
+
+			MOVLW D'65'			;DISPLAY A	
+			MOVWF PORTD, A
+			CALL  DATA1
+
+			MOVLW D'81'			;DISPLAY Q	
+			MOVWF PORTD, A
+			CALL  DATA1
+
+			MOVLW D'73'			;DISPLAY I	
+			MOVWF PORTD, A
+			CALL  DATA1
+
+			MOVLW D'77'			;DISPLAY M	
+			MOVWF PORTD, A
+			CALL  DATA1
+
+			MOVLW D'32'			;DSIPLAY SPACE
+			MOVWF PORTD, A
+			CALL  DATA1
+
+			MOVLW 0X01			
+			MOVWF PORTD, A
+			CALL  COMMAND1
+			
+			BRA   MATE
+;************************************************
+;DISPLAY ID NUMBER (DE97275)
+;************************************************
+MUS2		MOVLW D'68'		    ;DISPLAY D
+			MOVWF PORTD, A
+			CALL  DATA1
+
+			MOVLW D'69'			;DISPLAY E
+			MOVWF PORTD, A
+			CALL  DATA1
+
+			MOVLW D'57'			;DISPLAY 9
+			MOVWF PORTD, A
+			CALL  DATA1
+
+			MOVLW D'55'			;DISPLAY 7
+			MOVWF PORTD, A
+			CALL  DATA1
+
+			MOVLW D'50'			;DSIPLAY 2
+			MOVWF PORTD, A
+			CALL  DATA1
+
+			MOVLW D'55'			;DISPLAY 7	
+			MOVWF PORTD, A
+			CALL  DATA1
+
+			MOVLW D'53'			;DISPLAY 5	
+			MOVWF PORTD, A
+			CALL  DATA1
+
+			MOVLW D'32'			;DISPLAY SPACE	
+			MOVWF PORTD, A
+			CALL  DATA1
+
+			MOVLW 0X01
+			MOVWF PORTD, A
+			CALL COMMAND1
+
+			BRA   HIT 
+;**************************************************
+;Display Keypad Button
+;**************************************************
+
+SHOW1		MOVLW 0XC0			;DISPLAY 1
+			MOVWF PORTD, A
+			CALL COMMAND1
+			MOVLW D'49'
+			MOVWF PORTD, A
+			CALL  DATA1
+			BRA   MATE
+
+SHOW2		MOVLW 0XC0			;DISPLAY 2
+			MOVWF PORTD, A
+			CALL COMMAND1
+			MOVLW D'50'
+			MOVWF PORTD, A
+			CALL  DATA1
+			BRA   MATE
+
+SHOW3		MOVLW 0XC0			;DISPLAY 3
+			MOVWF PORTD, A
+			CALL COMMAND1
+			MOVLW D'51'
+			MOVWF PORTD, A
+			CALL  DATA1
+			BRA   MATE
+
+SHOW4		MOVLW 0XC0			;DISPLAY 4
+			MOVWF PORTD, A
+			CALL COMMAND1
+			MOVLW D'52'
+			MOVWF PORTD, A
+			CALL  DATA1
+			BRA   MATE
+
+SHOW5		MOVLW 0XC0			;DISPLAY 5
+			MOVWF PORTD, A
+			CALL COMMAND1
+			MOVLW D'53'
+			MOVWF PORTD, A
+			CALL  DATA1
+			BRA   MATE
+
+SHOW6		MOVLW 0XC0			;DISPLAY 6
+			MOVWF PORTD, A
+			CALL COMMAND1
+			MOVLW D'54'
+			MOVWF PORTD, A
+			CALL  DATA1
+			BRA   MATE
+
+SHOW7		MOVLW 0XC0			;DISPLAY 7
+			MOVWF PORTD, A
+			CALL COMMAND1
+			MOVLW D'55'
+			MOVWF PORTD, A
+			CALL  DATA1
+			BRA   MATE
+
+SHOW8		MOVLW 0XC0			;DISPLAY 8
+			MOVWF PORTD, A
+			CALL COMMAND1
+			MOVLW D'56'
+			MOVWF PORTD, A
+			CALL  DATA1
+			BRA   MATE
+
+SHOW9		MOVLW 0XC0			;DISPLAY 9
+			MOVWF PORTD, A
+			CALL COMMAND1
+			MOVLW D'57'
+			MOVWF PORTD, A
+			CALL  DATA1
+			BRA   MATE
+
+SHOWN		MOVLW 0XC0			;DISPLAY *
+			MOVWF PORTD, A
+			CALL COMMAND1
+			MOVLW D'42'
+			MOVWF PORTD, A
+			CALL  DATA1
+			BRA   MATE
+
+SHOW0		MOVLW 0XC0			;DISPLAY 0
+			MOVWF PORTD, A
+			CALL COMMAND1
+			MOVLW D'48'
+			MOVWF PORTD, A
+			CALL  DATA1
+			BRA   MATE
+
+SHOW#		MOVLW 0XC0			;DISPLAY #
+			MOVWF PORTD, A
+			CALL COMMAND1
+			MOVLW D'35'
+			MOVWF PORTD, A
+			CALL  DATA1
+			BRA   MATE
+;*************************************
+;MAIN PROGRAM
+;*************************************
+start		CLRF  TRISC, A
+			CLRF  TRISD, A
+			SETF  TRISB, A
+			BCF   TRISB, 4, A
+			BCF   TRISB, 5, A
+			BCF   TRISB, 6, A
+			BCF   TRISB, 7, A
+			SETF  TRISA, A
+
+			MOVLW 0X38				;CONFIGURE 2 LINES AND 5X7 MATRIX
+			MOVWF PORTD, A
+			CALL  COMMAND1
+
+			MOVLW 0X0E				;DISPLAY ON, CURSOR BLINKING
+			MOVWF PORTD, A
+			CALL  COMMAND1
+
+			MOVLW 0X01				;CLEAR DISPLAY SCREEN
+			MOVWF PORTD, A
+			CALL  COMMAND1
+
+			MOVLW 0X80				;FORCE CURSOR TO BEGINNING TO FIRST TIME
+			MOVWF PORTD, A
+			CALL  COMMAND1
+
+MATE		BTFSC PORTB, 0, A
+			BRA	  MUS1
+			CLRF  PORTD, A
+HIT 		BTFSC PORTB, 1, A
+			BRA	  MUS2
+			CLRF  PORTD, A
+
+KEYPAD1	    CLRF  PORTB, A
+			BSF   PORTB, 4, A
+			BTFSC PORTA, 4, A	
+			BRA   SHOW1
+			CLRF  PORTD, A
+
+KEYPAD2	    CLRF  PORTB, A
+			BSF   PORTB, 4, A
+			BTFSC PORTB, 2, A
+			BRA   SHOW2
+			CLRF  PORTD, A
+
+KEYPAD3	    CLRF  PORTB, A
+			BSF   PORTB, 4, A
+			BTFSC PORTB, 3, A
+			BRA   SHOW3
+			CLRF  PORTD, A
+
+KEYPAD4	    CLRF  PORTB, A
+			BSF   PORTB, 5, A
+			BTFSC PORTA, 4, A	
+			BRA   SHOW4
+			CLRF  PORTD, A
+
+KEYPAD5	    CLRF  PORTB, A
+			BSF   PORTB, 5, A
+			BTFSC PORTB, 2, A
+			BRA   SHOW5
+			CLRF  PORTD, A
+
+KEYPAD6	    CLRF  PORTB, A
+			BSF   PORTB, 5, A
+			BTFSC PORTB, 3, A
+			BRA   SHOW6
+			CLRF  PORTD, A
+
+KEYPAD7	    CLRF  PORTB, A
+			BSF   PORTB, 6, A
+			BTFSC PORTA, 4, A
+			BRA   SHOW7
+			CLRF  PORTD, A
+
+KEYPAD8	    CLRF  PORTB, A
+			BSF   PORTB, 6, A
+			BTFSC PORTB, 2, A
+			BRA   SHOW8
+			CLRF  PORTD, A
+
+KEYPAD9     CLRF  PORTB, A
+			BSF   PORTB, 6, A
+			BTFSC PORTB, 3, A
+			BRA   SHOW9
+			CLRF  PORTD, A
+
+KEYPADN     CLRF  PORTB, A
+			BSF   PORTB, 7, A
+			BTFSC PORTA, 4, A
+			BRA   SHOWN
+			CLRF  PORTD, A
+
+KEYPAD0     CLRF  PORTB, A
+			BSF   PORTB, 7, A
+			BTFSC PORTB, 2, A
+			BRA   SHOW0
+			CLRF  PORTD, A
+			
+KEYPAD#     CLRF  PORTB, A
+			BSF   PORTB, 7, A
+			BTFSC PORTB, 3, A
+			BRA   SHOW#
+			CLRF  PORTD, A
+			
+			
+
+			NOP
+			END
